@@ -27,5 +27,15 @@ node {
     stage('Publish build info') {
         server.publishBuildInfo buildInfo
     }
+    stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'SonarQubeScanner'
+    }
+    steps {
+        withSonarQubeEnv('sonarqube') {
+            sh "${scannerHome}/bin/sonar-scanner"
+        }
+    }
+    }
     }
 	 
