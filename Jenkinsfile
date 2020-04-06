@@ -5,6 +5,7 @@ node {
     // Create an Artifactory Maven instance.
     def rtMaven = Artifactory.newMavenBuild()
     def buildInfo
+    def scannerHome = tool 'SonarQubeScanner';
     
  rtMaven.tool = "maven"
 
@@ -27,15 +28,14 @@ node {
     stage('Publish build info') {
         server.publishBuildInfo buildInfo
     }
-    stage('Sonarqube') {
-    environment {
-        scannerHome = tool 'SonarQubeScanner'
-    }
-    steps {
-        withSonarQubeEnv('sonarqube') {
-            sh "${scannerHome}/bin/sonar-scanner"
-        }
-    }
-    }
+    stage('Code Quality') {
+                   steps {
+                       script {
+                          withSonarQubeEnv("sonarqube") {
+                          sh "${tool("scannerHome")}/bin/sonar-scanner"
+                                       }
+                               }
+                           }
+                        }
     }
 	 
