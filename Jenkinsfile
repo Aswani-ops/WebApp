@@ -29,13 +29,13 @@ node {
         server.publishBuildInfo buildInfo
     }
     stage('Code Quality') {
-                   steps {
+                   
                        script {
                           withSonarQubeEnv("sonarqube") {
                           sh "${tool("scannerHome")}/bin/sonar-scanner"
                                        }
                                }
-                           }
+                           
                         }
     }
 	 
