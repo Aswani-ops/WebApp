@@ -30,11 +30,11 @@ node {
     }
     stage('Code Quality') {
                    
-                       script {
+                       
                           withSonarQubeEnv("sonarqube") {
                           sh "${tool("scannerHome")}/bin/sonar-scanner"
                                        }
-                               }
+                               
                            
                         }
     }
