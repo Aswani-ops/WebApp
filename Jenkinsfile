@@ -5,7 +5,7 @@ node {
     // Create an Artifactory Maven instance.
     def rtMaven = Artifactory.newMavenBuild()
     def buildInfo
-    def scannerHome = tool 'SonarQubeScanner';
+   def scannerHome = tool 'SonarQubeScanner'
     
  rtMaven.tool = "maven"
 
