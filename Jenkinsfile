@@ -13,14 +13,12 @@ node {
         git url: 'https://github.com/Aswani-ops/webapp.git'
     }
     
-    stage('Code Quality') {
-                  
-                      
-                          def scannerHome = tool 'SonarQubeScanner';
-                          withSonarQubeEnv("sonarqube") {
-                          sh "${tool("SonarQubeScanner")}/bin/sonar-scanner"
-                                       }
-                               }
+    //stage('Code Quality') { 
+                         //def scannerHome = tool 'SonarQubeScanner';
+                          //withSonarQubeEnv("sonarqube") {
+                          //sh "${tool("SonarQubeScanner")}/bin/sonar-scanner"
+                               //        }
+                             //  }
                      
 
     stage('Artifactory configuration') {
@@ -38,6 +36,10 @@ node {
     stage('Publish build info') {
         server.publishBuildInfo buildInfo
     }
+    stage('Test') {
+    buildInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'initialize surefire:test', buildInfo: buildInfo;
+    junit '/functionaltest/target/surefire-reports/index.html'
+}
 
     }
 	 
