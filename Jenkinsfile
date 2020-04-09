@@ -32,10 +32,9 @@ node {
                    
                        
                           withSonarQubeEnv("sonarqube") {
-                          sh "${tool("scannerHome")}/bin/sonar-scanner"
-                                       }
-                               
-                           
+                          sh "${scannerHome}/bin/sonar-scanner"
+                                       }            
+           
                         }
     }
 	 
