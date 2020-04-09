@@ -5,13 +5,24 @@ node {
     // Create an Artifactory Maven instance.
     def rtMaven = Artifactory.newMavenBuild()
     def buildInfo
-   def scannerHome = tool 'SonarQubeScanner'
+   
     
  rtMaven.tool = "maven"
 
     stage('Clone sources') {
         git url: 'https://github.com/Aswani-ops/webapp.git'
     }
+    
+    stage('Code Quality') {
+                   steps {
+                       script {
+                          def scannerHome = tool 'SonarQubeScanner';
+                          withSonarQubeEnv("sonarqube") {
+                          sh "${tool("SonarQubeScanner")}/bin/sonar-scanner"
+                                       }
+                               }
+                           }
+                        }
 
     stage('Artifactory configuration') {
         // Tool name from Jenkins configuration
@@ -28,13 +39,6 @@ node {
     stage('Publish build info') {
         server.publishBuildInfo buildInfo
     }
-    stage('Code Quality') {
-                   
-                       
-                          withSonarQubeEnv("sonarqube") {
-                          sh "${scannerHome}/bin/sonar-scanner"
-                                       }            
-           
-                        }
+
     }
 	 
