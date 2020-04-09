@@ -14,15 +14,14 @@ node {
     }
     
     stage('Code Quality') {
-                   steps {
-                       script {
+                  
+                      
                           def scannerHome = tool 'SonarQubeScanner';
                           withSonarQubeEnv("sonarqube") {
                           sh "${tool("SonarQubeScanner")}/bin/sonar-scanner"
                                        }
                                }
-                           }
-                        }
+                     
 
     stage('Artifactory configuration') {
         // Tool name from Jenkins configuration
