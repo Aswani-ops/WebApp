@@ -32,11 +32,11 @@ node {
     stage('Maven build') {
         buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install'
    notifySuccessful()
-	      } catch (e) {
+	      } 
+    } catch (e) {
     currentBuild.result = "FAILED"
     notifyFailed()
     throw e
-  }
     }
   def notifySuccessful() {
   slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
