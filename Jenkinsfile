@@ -36,10 +36,6 @@ node {
     stage('Publish build info') {
         server.publishBuildInfo buildInfo
     }
-    stage('Test') {
-    buildInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'initialize surefire:test', buildInfo: buildInfo;
-    junit '/functionaltest/target/surefire-reports/index.html'
-}
 
     }
 	 
