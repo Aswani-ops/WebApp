@@ -43,6 +43,12 @@ node {
     stage('Publish build info') {
         server.publishBuildInfo buildInfo
     }
+	
+	stage('Deploy QA'){
+
+		deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.14.88.11:8080/')], contextPath: 'QAWebapp', war: '**/*.war'
+   
+	}
 
     }
   def notifySuccessful() {
