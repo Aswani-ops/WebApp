@@ -46,11 +46,9 @@ node {
      }
 
 	stage('functional-test') {
-	  steps {
 	    buildTestInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
 		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '/functionaltest/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
 	  }
-        }
 	
      stage('Publish build info') {
         server.publishBuildInfo buildInfo
