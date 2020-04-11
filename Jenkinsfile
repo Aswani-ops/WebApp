@@ -52,8 +52,10 @@ agent any
     }
 	stage('functional-test') {
 	    //buildTestInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
-	    echo 'maven clean'
-	    bat 'mvn -f functionaltest/pom.xml test'
+	    sh 	'''
+          	cd functionaltest
+          	mvn test
+    		'''
 	    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\functionaltest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
 	}
    stage ('BlazeMeter test'){
