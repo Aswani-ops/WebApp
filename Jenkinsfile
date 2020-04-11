@@ -5,6 +5,7 @@ node {
     // Create an Artifactory Maven instance.
     def rtMaven = Artifactory.newMavenBuild()
     def buildInfo
+    def buildTestInfo
     
     
  rtMaven.tool = "maven"
@@ -40,17 +41,22 @@ node {
     }
 
 
-    stage('Publish build info') {
-        server.publishBuildInfo buildInfo
-    }
+    stage('Deploy QA'){
+	deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://18.217.106.165:8080/')], contextPath: 'QAWebapp', war: '**/*.war'
+     }
+
+	stage('functional-test') {
+	  steps {
+	    buildTestInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\functionaltest\target\surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+	  }
+        }
 	
-	stage('Deploy QA'){
-
-		deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://18.217.106.165:8080/')], contextPath: 'QAWebapp', war: '**/*.war'
-   
-	}
-
+     stage('Publish build info') {
+        server.publishBuildInfo buildInfo
+	server.publishBuildInfo buildTestInfo
     }
+}
   def notifySuccessful() {
   slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
   }
