@@ -52,7 +52,9 @@ node {
 	//    buildTestInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
 	//	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\functionaltest\target\surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
 	  //}
-	
+   stage ('BlazeMeter test'){
+    blazeMeterTest(credentialsId: 'Blazemeter', testId: '7867856.taurus', workspaceId: '468392')
+  }	
  
 }
   def notifySuccessful() {
