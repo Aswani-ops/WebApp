@@ -44,10 +44,16 @@ node {
     stage('Deploy QA'){
 	deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://18.217.106.165:8080/')], contextPath: 'QAWebapp', war: '**/*.war'
      }
-
+	
+agent any
+    tools {
+        maven 'mavenHome'
+        jdk 'JavaHome'
+    }
 	stage('functional-test') {
 	    //buildTestInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
-	    sh 'mvn -f functionaltest/pom.xml test'
+	    
+	    bat ' mvn -f functionaltest/pom.xml test
 	    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\\functionaltest\\target\\surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
 	}
    stage ('BlazeMeter test'){
@@ -55,7 +61,7 @@ node {
   }	
     stage('Publish build info') {
         server.publishBuildInfo buildInfo
-	server.publishBuildInfo buildTestInfo
+	//server.publishBuildInfo buildTestInfo
     } 
 }
   def notifySuccessful() {
