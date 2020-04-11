@@ -46,7 +46,7 @@ node {
 	
 	stage('Deploy QA'){
 
-		deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://3.14.88.11:8080/')], contextPath: 'QAWebapp', war: '**/*.war'
+		deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://18.217.106.165:8080/')], contextPath: 'QAWebapp', war: '**/*.war'
    
 	}
 
