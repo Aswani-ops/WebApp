@@ -40,22 +40,22 @@ node {
     throw e
     }
 
-    stage('Publish build info') {
-        server.publishBuildInfo buildInfo
-	server.publishBuildInfo buildTestInfo
-    }
+
     stage('Deploy QA'){
 	deploy adapters: [tomcat8(credentialsId: 'tomcat', path: '', url: 'http://18.217.106.165:8080/')], contextPath: 'QAWebapp', war: '**/*.war'
      }
 
-	//stage('functional-test') {
-	//    buildTestInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
-	//	publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '\functionaltest\target\surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
-	  //}
+	stage('functional-test') {
+	    buildTestInfo = rtMaven.run pom: 'functionaltest/pom.xml', goals: 'test'
+		publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '//functionaltest//target//surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
+	  }
    stage ('BlazeMeter test'){
     blazeMeterTest(credentialsId: 'Blazemeter', testId: '7867856.taurus', workspaceId: '468392')
   }	
- 
+    stage('Publish build info') {
+        server.publishBuildInfo buildInfo
+	server.publishBuildInfo buildTestInfo
+    } 
 }
   def notifySuccessful() {
   slackSend (color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
